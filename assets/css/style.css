@@ -272,7 +272,7 @@ img {
 
 .home__title {
   font-size: 2rem;
-  color: var(--text-color-light);
+  color: hsl(205, 87%, 94%);
 }
 
 .home__subtitle {
@@ -320,6 +320,52 @@ img {
   box-shadow: inset 0px 3px 5px var(--gold-color),
     0px 0px 10px rgba(0, 0, 0, 0.25);
 }
+
+/* ========== CATALOGUE ========== */
+.catalogue__options {
+  position: relative;
+  width: 70%;
+  margin: 0 auto;
+}
+.options {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.option {
+  position: relative;
+  text-align: center;
+  color: var(--text-color);
+  padding: 0.5rem 1rem;
+  margin: 1rem 1rem;
+  cursor: pointer;
+  border-radius: 3px;
+}
+.option:after {
+  position: absolute;
+  content: "";
+  width: 100%;
+  transform: scaleX(0);
+  height: 2px;
+  bottom: 0;
+  left: 0;
+  background-color: var(--gold-color);
+  transform-origin: bottom right;
+  transition: transform 0.25s ease-out;
+}
+
+.selected:after,.option:hover:after {
+  transform: scaleX(1);
+  transform-origin: bottom left;
+}
+
+
+
 
 /* ========== RESPONSIVE ========== */
 @media screen and (max-width: 340px) {
@@ -389,7 +435,7 @@ img {
     font-size: var(--normal-font-size);
   }
   .nav__link:after {
-    content: '';
+    content: "";
     width: 100%;
     transform: scaleX(0);
     height: 2px;
@@ -399,7 +445,7 @@ img {
     transform-origin: bottom right;
     transition: transform 0.25s ease-out;
   }
-  
+
   .nav__link:hover:after {
     transform: scaleX(1);
     transform-origin: bottom left;

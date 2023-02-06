@@ -31,10 +31,10 @@ navLink.forEach((n) => n.addEventListener("click", linkAction));
 
 
 
-/*=============== SWIPER PROJECTS ===============*/
+/*=============== SWIPER SLIDES ===============*/
 let swiperProjects = new Swiper(".home__container", {
   spaceBetween: 10,
-
+  
   effect: 'fade',
   speed:750,
   coverflowEffect: {
@@ -47,4 +47,17 @@ let swiperProjects = new Swiper(".home__container", {
     disableOnInteraction: false,
   },
   slidesPerView: 1,
+});
+
+
+
+/*=============== SWIPER CATALOGUE ===============*/
+const options = document.querySelectorAll('.option');
+options.forEach(option => {
+  option.addEventListener('click', function() {
+    options.forEach(option => {
+      option.classList.remove('selected');
+    });
+    this.classList.add('selected');
+  });
 });
