@@ -35,22 +35,16 @@ navLink.forEach((n) => n.addEventListener("click", linkAction));
 let swiperProjects = new Swiper(".home__container", {
   spaceBetween: 10,
 
-  effect: 'coverflow',
+  effect: 'fade',
+  speed:750,
   coverflowEffect: {
     rotate: 30,
     slideShadows: false,
   },
   loop: true,
   autoplay: {
-    delay: 5000,
+    delay: 10_000, //ten seconds
+    disableOnInteraction: false,
   },
   slidesPerView: 1,
-  navigation: {
-    nextEl: ".swiper-button-next",
-    prevEl: ".swiper-button-prev",
-  },
-  pagination: {
-    el: ".swiper-pagination",
-  },
-  keyboard: true,
 });
