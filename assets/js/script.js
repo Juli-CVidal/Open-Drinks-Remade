@@ -48,14 +48,6 @@ let swiperProjects = new Swiper(".home__container", {
 });
 
 /*===============  CATALOGUE ===============*/
-class Drink {
-  constructor(id, name, category, image) {
-    this.id = id;
-    this.name = name;
-    this.category = category;
-    this.image = image;
-  }
-}
 function createDrink(drink) {
   const div = document.createElement("div");
   div.id = drink.idDrink;
@@ -84,6 +76,8 @@ const API_URL = "https://www.thecocktaildb.com/api/json/v1/1/filter.php?";
 const DRINKS_CONTAINER = document.getElementById("drinks");
 let lastSelected = "All";
 let drinks = [];
+let filteredList;
+
 const FETCH_CATEGORIES = [
   "Beer",
   "Cocktail",
@@ -97,7 +91,7 @@ const DRINK_CATEGORIES = [
   "Shot",
   "Coffee-Tea",
   "Homemade-Liqueur",
-  "Non-Alcoholic",
+  // "Non-Alcoholic",
 ];
 
 function getAllDrinks() {
@@ -118,26 +112,50 @@ function getAllDrinks() {
           }))
         );
       });
-      console.log(drinks)
+
       const response = await fetch(`${API_URL}a=Non_Alcoholic`);
       return await response.json();
     })
     .then((list) => {
       drinks = drinks.concat(
-        list.drinks.map((item) => ({ ...item, category: "Non_Alcoholic" }))
+        list.drinks.map((item) => ({ ...item, category: "Non-Alcoholic" }))
       );
-      drinks.sort((a,b)=> a.strDrink - b.strDrink);
+      drinks.sort((a, b) => a.strDrink - b.strDrink);
     })
-    .then(() => initFilters())
+    .then(() => {
+      initFilters();
+      initSearchInput();
+    })
     .catch((error) => {
       console.error(error);
     });
 }
 
+function filterByName(name) {
+  DRINKS_CONTAINER.innerHTML = "";
+  let listToShow =
+    name == ""
+      ? filteredList
+      : filteredList.filter((drink) =>
+          drink.strDrink.toLowerCase().startsWith(name)
+        );
+
+  listToShow.forEach((drink) => {
+    DRINKS_CONTAINER.appendChild(createDrink(drink));
+  });
+}
+
+function initSearchInput() {
+  const searchInput = document.getElementById("search");
+  searchInput.addEventListener("keyup", () => {
+    filterByName(searchInput.value);
+  });
+}
+
 function initFilters() {
-  filterByCategory(lastSelected)
+  filterByCategory(lastSelected);
   const options = document.querySelectorAll(".option");
-  console.log(options)
+
   options.forEach((option) => {
     option.addEventListener("click", function () {
       if (this.id !== lastSelected) {
@@ -158,12 +176,10 @@ function initFilters() {
 
 function filterByCategory(category) {
   DRINKS_CONTAINER.innerHTML = "";
-  const filteredList =
+  filteredList =
     category === "All"
       ? drinks
       : drinks.filter((drink) => drink.category === category);
-
-  console.log(category);
   filteredList.forEach((drink) => {
     DRINKS_CONTAINER.appendChild(createDrink(drink));
   });
