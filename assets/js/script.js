@@ -137,7 +137,7 @@ function filterByName(name) {
     name == ""
       ? filteredList
       : filteredList.filter((drink) =>
-          drink.strDrink.toLowerCase().startsWith(name)
+          drink.strDrink.toLowerCase().startsWith(name.toLowerCase())
         );
 
   listToShow.forEach((drink) => {
