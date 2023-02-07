@@ -56,20 +56,15 @@ class Drink {
     this.image = image;
   }
 }
-const API_URL = "https://www.thecocktaildb.com/api/json/v1/1/filter.php?";
-const DRINKS_CONTAINER = document.getElementById("drinks");
-let drinks = [];
-
-const createDrink = (drink) => {
-  const container = document.createElement("div");
+function createDrink(drink) {
   const div = document.createElement("div");
-  div.id = drink.id;
+  div.id = drink.idDrink;
   div.classList.add(`media`);
   div.classList.add(drink.category);
   const divLeft = document.createElement("div");
   divLeft.classList.add("media-left");
   const img = document.createElement("img");
-  img.src = drink.image;
+  img.src = drink.strDrinkThumb;
   img.alt = "";
   divLeft.appendChild(img);
 
@@ -77,57 +72,101 @@ const createDrink = (drink) => {
   divBody.classList.add("media-body");
   const h4 = document.createElement("h4");
   h4.classList.add("media-heading");
-  h4.textContent = drink.name;
+  h4.textContent = drink.strDrink;
   divBody.appendChild(h4);
 
   div.appendChild(divLeft);
   div.appendChild(divBody);
-  container.appendChild(div);
-  return container;
-};
+  return div;
+}
 
-const CATEGORIES = [
+const API_URL = "https://www.thecocktaildb.com/api/json/v1/1/filter.php?";
+const DRINKS_CONTAINER = document.getElementById("drinks");
+let lastSelected = "All";
+let drinks = [];
+const FETCH_CATEGORIES = [
   "Beer",
   "Cocktail",
-  // "Shot",
-  // "Coffe / Tea",
-  // "Homenade Liqueur",
-  // "Punch / Party Drink",
-  // "Soft Drink",
-  // ,"Non_Alcoholic"
+  "Shot",
+  "Coffee / Tea",
+  "Homemade Liqueur",
+];
+const DRINK_CATEGORIES = [
+  "Beer",
+  "Cocktail",
+  "Shot",
+  "Coffee-Tea",
+  "Homemade-Liqueur",
+  "Non-Alcoholic",
 ];
 
-async function getCategory(category) {
-  let drinkElement;
-  const response = await fetch(API_URL + "c=" + category);
-  const responseJson = await response.json();
-  responseJson.drinks.forEach((drink) => {
-    drinkElement = new Drink(
-      drink.idDrink,
-      drink.strDrink,
-      category,
-      drink.strDrinkThumb
-    );
-    drinks.push(drinkElement);
-  });
-}
-
 function getAllDrinks() {
-  CATEGORIES.forEach((category) => {
-    getCategory(category);
+  const promises = [];
+
+  FETCH_CATEGORIES.forEach((category) => {
+    promises.push(
+      fetch(`${API_URL}c=${category}`).then((response) => response.json())
+    );
   });
-  drinks.sort((a, b) => {
-    return a.name - b.name;
+  Promise.all(promises)
+    .then(async (lists) => {
+      lists.forEach((list, index) => {
+        drinks = drinks.concat(
+          list.drinks.map((item) => ({
+            ...item,
+            category: DRINK_CATEGORIES[index],
+          }))
+        );
+      });
+      console.log(drinks)
+      const response = await fetch(`${API_URL}a=Non_Alcoholic`);
+      return await response.json();
+    })
+    .then((list) => {
+      drinks = drinks.concat(
+        list.drinks.map((item) => ({ ...item, category: "Non_Alcoholic" }))
+      );
+      drinks.sort((a,b)=> a.strDrink - b.strDrink);
+    })
+    .then(() => initFilters())
+    .catch((error) => {
+      console.error(error);
+    });
+}
+
+function initFilters() {
+  filterByCategory(lastSelected)
+  const options = document.querySelectorAll(".option");
+  console.log(options)
+  options.forEach((option) => {
+    option.addEventListener("click", function () {
+      if (this.id !== lastSelected) {
+        const lastSelectedOption = document.getElementById(lastSelected);
+        if (
+          lastSelectedOption &&
+          lastSelectedOption.classList.contains("selected")
+        ) {
+          lastSelectedOption.classList.remove("selected");
+        }
+        this.classList.add("selected");
+        lastSelected = this.id;
+        filterByCategory(lastSelected);
+      }
+    });
   });
 }
-getAllDrinks();
 
-const options = document.querySelectorAll(".option");
-options.forEach((option) => {
-  option.addEventListener("click", function () {
-    options.forEach((option) => {
-      option.classList.remove("selected");
-    });
-    this.classList.add("selected");
+function filterByCategory(category) {
+  DRINKS_CONTAINER.innerHTML = "";
+  const filteredList =
+    category === "All"
+      ? drinks
+      : drinks.filter((drink) => drink.category === category);
+
+  console.log(category);
+  filteredList.forEach((drink) => {
+    DRINKS_CONTAINER.appendChild(createDrink(drink));
   });
-});
+}
+
+getAllDrinks();
