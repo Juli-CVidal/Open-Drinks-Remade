@@ -350,7 +350,7 @@ img {
   border-radius: 0px 12px 12px 0px;
 }
 
-.swiper-container {
+.catalogue .swiper-container {
   box-shadow: inset -62px 0px 69px -84px rgba(0,0,0,0.23);
   display: flex;
   justify-content: flex-start;
@@ -358,7 +358,7 @@ img {
   overflow: hidden;
   flex-grow: 1;
 }
-.swiper-slide{
+.catalogue .swiper-slide{
   width:auto;
 }
 
@@ -407,7 +407,7 @@ img {
   background-position: center;
   background-repeat: no-repeat;
   width: 100px;
-  height: 100px;
+  height: 20%;
   border-top-left-radius: 12px;
   border-top-right-radius: 12px;
 }
@@ -428,8 +428,8 @@ img {
   margin-right: 25px;
   transition: all 0.4s cubic-bezier(0.175, 0.885, 0, 1);
   background-color: #fff;
-  width: 200px;
-  height: 200px;
+  width: 150px;
+  height: 150px;
   position: relative;
   border-radius: 12px;
   overflow: hidden;
@@ -441,11 +441,12 @@ img {
 }
 
 .card__info {
+  width: 100%;
   z-index: 2;
   background-color: #fff;
   border-bottom-left-radius: 12px;
   border-bottom-right-radius: 12px;
-  padding: 16px 24px 24px 24px;
+  padding: 16px;
 }
 
 .card__category {

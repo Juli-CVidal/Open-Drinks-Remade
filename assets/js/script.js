@@ -59,7 +59,7 @@ var options_swiper = new Swiper('#options-slider', {
 
 function createCard(drink) {
   const cardContainer = document.createElement("div");
-  cardContainer.classList.add("card", "card--1");
+  cardContainer.classList.add("card");
 
   const imgContainer = document.createElement("div");
   imgContainer.classList.add("card__img");
@@ -141,9 +141,10 @@ function getAllDrinks() {
       drinks = drinks.concat(
         list.drinks.map((item) => ({ ...item, category: "Non-Alcoholic" }))
       );
-      drinks.sort((a, b) => a.strDrink - b.strDrink);
+     
     })
     .then(() => {
+      drinks.sort((a, b) => a.strDrink.localeCompare(b.strDrink));
       initFilters();
       initSearchInput();
     })
