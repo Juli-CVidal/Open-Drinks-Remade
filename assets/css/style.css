@@ -340,7 +340,6 @@ img {
   list-style: none;
 }
 
-
 .fixed-container {
   display: flex;
   justify-content: center;
@@ -351,15 +350,17 @@ img {
 }
 
 .catalogue .swiper-container {
-  box-shadow: inset -62px 0px 69px -84px rgba(0,0,0,0.23);
+  box-shadow: inset -62px 0px 69px -84px rgba(0, 0, 0, 0.23);
   display: flex;
   justify-content: flex-start;
   align-items: center;
   overflow: hidden;
   flex-grow: 1;
 }
-.catalogue .swiper-slide{
-  width:auto;
+
+.catalogue .swiper-wrapper,
+.catalogue .swiper-slide {
+  width: auto;
 }
 
 .option {
@@ -392,13 +393,53 @@ img {
   transform-origin: bottom left;
 }
 
+.search {
+  margin: 0.5rem auto 1rem;
+  position: relative;
+  width: 100%;
+  display: block;
+  border: none;
+  padding: 10px 0;
+  border-bottom: solid 1px var(--gold-color);
+  transition: all 0.3s cubic-bezier(0.64, 0.09, 0.08, 1);
+  background: linear-gradient(
+    to bottom,
+    var(--body-color) 96%,
+    var(--gold-color) 4%
+  );
+  background-position: -1000px 0;
+  background-size: 100% 100%;
+  background-repeat: no-repeat;
+}
+.search:focus {
+  outline: none;
+  background-position: 0 0;
+}
+
 .drinks {
   display: grid;
-  justify-items: center;
-  grid-template-columns: repeat(2, 1fr);
-  grid-gap: 1rem;
+  /* justify-items: center; */
+  grid-template-columns: repeat(auto-fill, minmax(200px,1fr));
+  /* grid-gap: 1rem; */
   margin: 0 auto;
   max-width: 80%;
+}
+
+.card {
+  margin: 0 25px 16px 0;
+  transition: all 0.4s cubic-bezier(0.175, 0.885, 0, 1);
+  background-color: #fff;
+  max-width: 300px;
+  min-height: 200px;
+  position: relative;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0px 13px 10px -7px rgba(0, 0, 0, 0.1);
+}
+
+.card:hover {
+  box-shadow: 0px 30px 18px -8px rgba(0, 0, 0, 0.1);
+  transform: scale(1.1, 1.1);
 }
 
 .card__img {
@@ -424,20 +465,10 @@ img {
   border-top-right-radius: 12px;
   top: 0;
 }
-.card {
-  margin-right: 25px;
-  transition: all 0.4s cubic-bezier(0.175, 0.885, 0, 1);
-  background-color: #fff;
-  width: 150px;
-  height: 150px;
-  position: relative;
-  border-radius: 12px;
-  overflow: hidden;
-  box-shadow: 0px 13px 10px -7px rgba(0, 0, 0, 0.1);
-}
-.card:hover {
-  box-shadow: 0px 30px 18px -8px rgba(0, 0, 0, 0.1);
-  transform: scale(1.1, 1.1);
+
+.card:hover .card__img--hover {
+  height: 100%;
+  opacity: 0.3;
 }
 
 .card__info {
@@ -447,6 +478,12 @@ img {
   border-bottom-left-radius: 12px;
   border-bottom-right-radius: 12px;
   padding: 16px;
+}
+
+
+.card:hover .card__info {
+  background-color: transparent;
+  position: relative;
 }
 
 .card__category {
@@ -470,60 +507,8 @@ img {
   font-family: "Roboto Slab", serif;
 }
 
-.card__by {
-  font-size: 12px;
-  font-family: "Raleway", sans-serif;
-  font-weight: 500;
-}
 
-.card__author {
-  display: inline-block;
-  font-weight: 600;
-  text-decoration: none;
-  color: #ad7d52;
-}
 
-.card:hover .card__img--hover {
-  height: 100%;
-  opacity: 0.3;
-}
-
-.card:hover .card__info {
-  background-color: transparent;
-  position: relative;
-}
-
-.card:hover .card__info-hover {
-  opacity: 1;
-}
-
-.media img {
-  width: 100px;
-  height: 100px;
-}
-
-.search {
-  margin: 0.5rem auto 1rem;
-  position: relative;
-  width: 100%;
-  display: block;
-  border: none;
-  padding: 10px 0;
-  border-bottom: solid 1px var(--gold-color);
-  transition: all 0.3s cubic-bezier(0.64, 0.09, 0.08, 1);
-  background: linear-gradient(
-    to bottom,
-    var(--body-color) 96%,
-    var(--gold-color) 4%
-  );
-  background-position: -1000px 0;
-  background-size: 100% 100%;
-  background-repeat: no-repeat;
-}
-.search:focus {
-  outline: none;
-  background-position: 0 0;
-}
 
 /* ========== RESPONSIVE ========== */
 @media screen and (max-width: 340px) {
@@ -556,9 +541,9 @@ img {
     margin: 0.5rem 0.5rem;
     padding: 0.25rem 0.5rem;
   }
-  .drinks {
+  /* .drinks {
     grid-template-columns: repeat(3, 1fr);
-  }
+  } */
 }
 
 /* For large devices */
@@ -626,7 +611,7 @@ img {
     padding: 0.5rem 0.75rem;
   }
 
-  .drinks {
+  /* .drinks {
     grid-template-columns: repeat(4, 1fr);
-  }
+  } */
 }

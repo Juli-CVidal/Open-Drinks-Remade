@@ -49,54 +49,17 @@ let swiperProjects = new Swiper(".home__container", {
 
 /*===============  CATALOGUE ===============*/
 /*SWIPER FOR OPTIONS*/
-var options_swiper = new Swiper('#options-slider', {
+var options_swiper = new Swiper("#options-slider", {
   slidesPerView: "auto",
   spaceBetween: 10,
-  freeMode: true
+  freeMode: true,
 });
-
-
-
-function createCard(drink) {
-  const cardContainer = document.createElement("div");
-  cardContainer.classList.add("card");
-
-  const imgContainer = document.createElement("div");
-  imgContainer.classList.add("card__img");
-  imgContainer.style.backgroundImage = `url(${drink.strDrinkThumb})`;
-  cardContainer.appendChild(imgContainer);
-
-  const linkContainer = document.createElement("a");
-  linkContainer.classList.add("card_link");
-  linkContainer.href = "#";
-  cardContainer.appendChild(linkContainer);
-
-  const imgHoverContainer = document.createElement("div");
-  imgHoverContainer.classList.add("card__img--hover");
-  imgHoverContainer.style.backgroundImage = `url(${drink.strDrinkThumb})`;
-  linkContainer.appendChild(imgHoverContainer);
-
-  const infoContainer = document.createElement("div");
-  infoContainer.classList.add("card__info");
-  cardContainer.appendChild(infoContainer);
-
-
-  const categoryContainer = document.createElement("span");
-  categoryContainer.classList.add("card__category");
-  categoryContainer.textContent = drink.category;
-  infoContainer.appendChild(categoryContainer);
-
-  const titleContainer = document.createElement("h3");
-  titleContainer.classList.add("card__title");
-  titleContainer.textContent = drink.strDrink;
-  infoContainer.appendChild(titleContainer);
-  return cardContainer;
-}
 
 const API_URL = "https://www.thecocktaildb.com/api/json/v1/1/filter.php?";
 const DRINKS_CONTAINER = document.getElementById("drinks");
 let lastSelected = "All";
-let drinks = [];
+let DRINK_LIST = [];
+let drinks;
 let filteredList;
 
 const FETCH_CATEGORIES = [
@@ -115,43 +78,31 @@ const DRINK_CATEGORIES = [
   // "Non-Alcoholic",
 ];
 
-function getAllDrinks() {
-  const promises = [];
-
-  FETCH_CATEGORIES.forEach((category) => {
-    promises.push(
-      fetch(`${API_URL}c=${category}`).then((response) => response.json())
-    );
-  });
-  Promise.all(promises)
-    .then(async (lists) => {
-      lists.forEach((list, index) => {
-        drinks = drinks.concat(
-          list.drinks.map((item) => ({
-            ...item,
-            category: DRINK_CATEGORIES[index],
-          }))
-        );
-      });
-
-      const response = await fetch(`${API_URL}a=Non_Alcoholic`);
-      return await response.json();
-    })
-    .then((list) => {
-      drinks = drinks.concat(
-        list.drinks.map((item) => ({ ...item, category: "Non-Alcoholic" }))
-      );
-     
-    })
-    .then(() => {
-      drinks.sort((a, b) => a.strDrink.localeCompare(b.strDrink));
-      initFilters();
-      initSearchInput();
-    })
-    .catch((error) => {
-      console.error(error);
-    });
+function goToDetails(id) {
+  localStorage.setItem("DRINK_LIST", JSON.stringify(DRINK_LIST));
+  window.location.href = `/drink_details/${id}`;
 }
+
+const createCard = (drink) => {
+  const card = document.createElement("div");
+  card.id = drink.idDrink;
+  card.className = "card";
+  card.innerHTML = `
+    <div class="card__img" style="background-image: url(${drink.strDrinkThumb})"></div>
+    <a class="card__link" href="#">
+      <div class="card__img--hover" style="background-image: url(${drink.strDrinkThumb})"></div>
+      <div class="card__info">
+        <span class="card__category">${drink.category}</span>
+        <h3 class="card__title">${drink.strDrink}</h3>
+      </div>
+    </a>
+  `;
+  card.querySelector(".card__link").addEventListener("click", (e) => {
+    e.preventDefault();
+    goToDetails(drink.idDrink);
+  });
+  return card;
+};
 
 function filterByName(name) {
   DRINKS_CONTAINER.innerHTML = "";
@@ -171,6 +122,19 @@ function initSearchInput() {
   const searchInput = document.getElementById("search");
   searchInput.addEventListener("keyup", () => {
     filterByName(searchInput.value);
+  });
+}
+
+function filterByCategory(category) {
+  DRINKS_CONTAINER.innerHTML = "";
+  let filteredCards = DRINK_LIST;
+  if (category !== "All") {
+    filteredCards = DRINK_LIST.filter((card) => {
+      return card.querySelector(".card__category").innerHTML === category;
+    });
+  }
+  filteredCards.forEach((card) => {
+    DRINKS_CONTAINER.appendChild(createCard(card));
   });
 }
 
@@ -196,15 +160,55 @@ function initFilters() {
   });
 }
 
-function filterByCategory(category) {
-  DRINKS_CONTAINER.innerHTML = "";
-  filteredList =
-    category === "All"
-      ? drinks
-      : drinks.filter((drink) => drink.category === category);
-  filteredList.forEach((drink) => {
-    DRINKS_CONTAINER.appendChild(createCard(drink));
+function getAllDrinks() {
+  const promises = [];
+  let drinks = [];
+
+  FETCH_CATEGORIES.forEach((category) => {
+    promises.push(
+      fetch(`${API_URL}c=${category}`).then((response) => response.json())
+    );
   });
+  Promise.all(promises)
+    .then(async (lists) => {
+      lists.forEach((list, index) => {
+        drinks = drinks.concat(
+          list.drinks.map((item) => ({
+            ...item,
+            category: DRINK_CATEGORIES[index],
+          }))
+        );
+      });
+
+      const response = await fetch(`${API_URL}a=Non_Alcoholic`);
+      return await response.json();
+    })
+    .then((list) => {
+      drinks = drinks.concat(
+        list.drinks.map((item) => ({ ...item, category: "Non-Alcoholic" }))
+      );
+    })
+    .then(() => {
+      drinks.sort((a, b) => a.strDrink.localeCompare(b.strDrink));
+      DRINK_LIST = drinks;
+      drinks.forEach((drink) => {
+        createCard(drink);
+      });
+      initFilters();
+      initSearchInput();
+    })
+    .catch((error) => {
+      console.error(error);
+    });
 }
 
-getAllDrinks();
+const LIST_ON_STORAGE = localStorage.getItem("DRINK_LIST");
+if (LIST_ON_STORAGE) {
+  DRINK_LIST = JSON.parse(LIST_ON_STORAGE);
+  initFilters();
+  initSearchInput();
+} else {
+  getAllDrinks();
+}
+
+// getAllDrinks();
