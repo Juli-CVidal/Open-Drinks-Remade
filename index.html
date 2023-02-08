@@ -118,15 +118,33 @@
       <section class="catalogue" id="catalogue">
         <div class="catalogue__container">
           <div class="catalogue__options">
-            <ul class="options">
-              <li class="option selected" id="All">All</li>
-              <li class="option" id="Beer">Beer</li>
-              <li class="option" id="Cocktail">Cocktail</li>
-              <li class="option" id="Shot">Shot</li>
-              <li class="option" id="Coffee-Tea">Coffee</li>
-              <li class="option" id="Homemade-Liqueur">Homemade</li>
-              <li class="option" id="Non-Alcoholic">Non-Alcoholic</li>
-            </ul>
+            <div class="options-container">
+              <div class="fixed-container">
+                <li class="option selected" id="All">All</li>
+              </div>
+              <div class="swiper-container" id="options-slider">
+                <div class="swiper-wrapper">
+                  <div class="swiper-slide">
+                    <li class="option" id="Beer">Beer</li>
+                  </div>
+                  <div class="swiper-slide">
+                    <li class="option" id="Cocktail">Cocktail</li>
+                  </div>
+                  <div class="swiper-slide">
+                    <li class="option" id="Shot">Shot</li>
+                  </div>
+                  <div class="swiper-slide">
+                    <li class="option" id="Coffee-Tea">Coffee</li>
+                  </div>
+                  <div class="swiper-slide">
+                    <li class="option" id="Homemade-Liqueur">Homemade</li>
+                  </div>
+                  <div class="swiper-slide">
+                    <li class="option" id="Non-Alcoholic">Non-Alcoholic</li>
+                  </div>
+                </div>
+              </div>
+            </div>
             <input
               type="text"
               name="search"

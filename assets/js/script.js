@@ -48,28 +48,49 @@ let swiperProjects = new Swiper(".home__container", {
 });
 
 /*===============  CATALOGUE ===============*/
-function createDrink(drink) {
-  const div = document.createElement("div");
-  div.id = drink.idDrink;
-  div.classList.add(`media`);
-  div.classList.add(drink.category);
-  const divLeft = document.createElement("div");
-  divLeft.classList.add("media-left");
-  const img = document.createElement("img");
-  img.src = drink.strDrinkThumb;
-  img.alt = "";
-  divLeft.appendChild(img);
+/*SWIPER FOR OPTIONS*/
+var options_swiper = new Swiper('#options-slider', {
+  slidesPerView: "auto",
+  spaceBetween: 10,
+  freeMode: true
+});
 
-  const divBody = document.createElement("div");
-  divBody.classList.add("media-body");
-  const h4 = document.createElement("h4");
-  h4.classList.add("media-heading");
-  h4.textContent = drink.strDrink;
-  divBody.appendChild(h4);
 
-  div.appendChild(divLeft);
-  div.appendChild(divBody);
-  return div;
+
+function createCard(drink) {
+  const cardContainer = document.createElement("div");
+  cardContainer.classList.add("card", "card--1");
+
+  const imgContainer = document.createElement("div");
+  imgContainer.classList.add("card__img");
+  imgContainer.style.backgroundImage = `url(${drink.strDrinkThumb})`;
+  cardContainer.appendChild(imgContainer);
+
+  const linkContainer = document.createElement("a");
+  linkContainer.classList.add("card_link");
+  linkContainer.href = "#";
+  cardContainer.appendChild(linkContainer);
+
+  const imgHoverContainer = document.createElement("div");
+  imgHoverContainer.classList.add("card__img--hover");
+  imgHoverContainer.style.backgroundImage = `url(${drink.strDrinkThumb})`;
+  linkContainer.appendChild(imgHoverContainer);
+
+  const infoContainer = document.createElement("div");
+  infoContainer.classList.add("card__info");
+  cardContainer.appendChild(infoContainer);
+
+
+  const categoryContainer = document.createElement("span");
+  categoryContainer.classList.add("card__category");
+  categoryContainer.textContent = drink.category;
+  infoContainer.appendChild(categoryContainer);
+
+  const titleContainer = document.createElement("h3");
+  titleContainer.classList.add("card__title");
+  titleContainer.textContent = drink.strDrink;
+  infoContainer.appendChild(titleContainer);
+  return cardContainer;
 }
 
 const API_URL = "https://www.thecocktaildb.com/api/json/v1/1/filter.php?";
@@ -141,7 +162,7 @@ function filterByName(name) {
         );
 
   listToShow.forEach((drink) => {
-    DRINKS_CONTAINER.appendChild(createDrink(drink));
+    DRINKS_CONTAINER.appendChild(createCard(drink));
   });
 }
 
@@ -181,7 +202,7 @@ function filterByCategory(category) {
       ? drinks
       : drinks.filter((drink) => drink.category === category);
   filteredList.forEach((drink) => {
-    DRINKS_CONTAINER.appendChild(createDrink(drink));
+    DRINKS_CONTAINER.appendChild(createCard(drink));
   });
 }
 
