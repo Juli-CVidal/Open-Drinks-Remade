@@ -407,7 +407,7 @@ img {
     var(--body-color) 96%,
     var(--gold-color) 4%
   );
-  background-position: -1000px 0;
+  background-position: -2000px 0;
   background-size: 100% 100%;
   background-repeat: no-repeat;
 }

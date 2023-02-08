@@ -41,7 +41,7 @@ let swiperProjects = new Swiper(".home__container", {
   },
   loop: true,
   autoplay: {
-    delay: 10_000, //ten seconds
+    delay: 5_000, //five seconds
     disableOnInteraction: false,
   },
   slidesPerView: 1,
@@ -127,15 +127,12 @@ function initSearchInput() {
 
 function filterByCategory(category) {
   DRINKS_CONTAINER.innerHTML = "";
-  let filteredCards = DRINK_LIST;
+  console.log(category);
+  filteredList = DRINK_LIST;
   if (category !== "All") {
-    filteredCards = DRINK_LIST.filter((card) => {
-      return card.querySelector(".card__category").innerHTML === category;
-    });
+    filteredList = filteredList.filter((drink) => drink.category === category);
   }
-  filteredCards.forEach((card) => {
-    DRINKS_CONTAINER.appendChild(createCard(card));
-  });
+  filterByName(document.getElementById("search").value);
 }
 
 function initFilters() {
