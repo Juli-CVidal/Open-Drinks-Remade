@@ -80,7 +80,8 @@ const DRINK_CATEGORIES = [
 
 function goToDetails(id) {
   localStorage.setItem("DRINK_LIST", JSON.stringify(DRINK_LIST));
-  window.location.href = `/drink_details/${id}`;
+  localStorage.setItem("id", id);
+  window.location.href = "details.html";
 }
 
 const createCard = (drink) => {
@@ -127,7 +128,6 @@ function initSearchInput() {
 
 function filterByCategory(category) {
   DRINKS_CONTAINER.innerHTML = "";
-  console.log(category);
   filteredList = DRINK_LIST;
   if (category !== "All") {
     filteredList = filteredList.filter((drink) => drink.category === category);
