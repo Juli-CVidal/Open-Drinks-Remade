@@ -20,6 +20,11 @@ if (navClose) {
 }
 
 /*=============== REMOVE MENU MOBILE ===============*/
+const FORMAT_CATEGORIES = {
+  "Coffee / Tea": "Cofee-Tea",
+  "Homemade Liqueur": "Homemade-Liqueur",
+};
+
 const NAVIGATION_LINKS = document.querySelectorAll(".nav__link");
 
 const linkAction = () => {
@@ -31,6 +36,15 @@ const linkAction = () => {
 NAVIGATION_LINKS.forEach((n) => n.addEventListener("click", linkAction));
 
 const API_URL = "https://www.thecocktaildb.com/api/json/v1/1/lookup.php?i=";
+
+function getCategories(drinkResponse) {
+  let categories =
+    FORMAT_CATEGORIES[drinkResponse.strCategory] || drinkResponse.strCategory;
+  if (drinkResponse.strAlcoholic == "Non alcoholic") {
+    categories += ", Non-Alcoholic";
+  }
+  return categories;
+}
 
 function getIngredients(drinkResponse) {
   const INGREDIENT_MEASURES = {};
@@ -70,6 +84,7 @@ function createPage(data) {
     "drink__image"
   ).style.backgroundImage = `url(${data.strDrinkThumb})`;
   document.getElementById("drink__name").innerText = data.strDrink;
+  document.getElementById("drink__categories").innerText = getCategories(data);
 
   getIngredients(data);
   getSteps(data.strInstructions);
