@@ -263,12 +263,6 @@
   font-family: "Roboto Slab", serif;
 }
 
-@media screen and (min-width: 767px) {
-  .option {
-    margin: 0.5rem 0.5rem;
-    padding: 0.25rem 0.5rem;
-  }
-}
 
 /* For large devices */
 @media screen and (min-width: 1023px) {
@@ -278,5 +272,15 @@
   .option {
     margin: 1rem 1rem;
     padding: 0.5rem 0.75rem;
+  }
+}
+
+@media screen and (max-width: 500px){
+  .drinks{
+    grid-template-columns: repeat(2,1fr);
+  }
+
+  .card{
+    min-height: 150px;
   }
 }
