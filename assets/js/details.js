@@ -20,15 +20,15 @@ if (navClose) {
 }
 
 /*=============== REMOVE MENU MOBILE ===============*/
-const navLink = document.querySelectorAll(".nav__link");
+const NAVIGATION_LINKS = document.querySelectorAll(".nav__link");
 
 const linkAction = () => {
   const navMenu = document.getElementById("nav-menu");
   // When we click on each nav__link, we remove the show-menu class
+  navToggle.style.opacity = 1;
   navMenu.classList.remove("show-menu");
 };
-navLink.forEach((n) => n.addEventListener("click", linkAction));
-
+NAVIGATION_LINKS.forEach((n) => n.addEventListener("click", linkAction));
 
 const API_URL = "https://www.thecocktaildb.com/api/json/v1/1/lookup.php?i=";
 
@@ -45,30 +45,32 @@ function getIngredients(drinkResponse) {
 
   const ingredient_container = document.getElementById("ingredients");
   const ul = document.createElement("ul");
-  Object.entries(INGREDIENT_MEASURES).map(([ingredient,measure])=>{
+  Object.entries(INGREDIENT_MEASURES).map(([ingredient, measure]) => {
     const li = document.createElement("li");
     li.textContent = `${measure} ${ingredient}`;
     ul.appendChild(li);
-  })
+  });
 
   ingredient_container.appendChild(ul);
 }
 
-function getSteps(steps){
+function getSteps(steps) {
   const STEP_LIST = steps.split(".");
   const STEP_CONTAINER = document.getElementById("steps");
 
-  STEP_LIST.forEach(step => {
+  STEP_LIST.forEach((step) => {
     const p = document.createElement("p");
     p.innerText = step;
     STEP_CONTAINER.appendChild(p);
-  })
+  });
 }
 
-function createPage(data){
-  document.getElementById("drink__image").style.backgroundImage = `url(${data.strDrinkThumb})`
+function createPage(data) {
+  document.getElementById(
+    "drink__image"
+  ).style.backgroundImage = `url(${data.strDrinkThumb})`;
   document.getElementById("drink__name").innerText = data.strDrink;
-  
+
   getIngredients(data);
   getSteps(data.strInstructions);
 }

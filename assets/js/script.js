@@ -20,14 +20,15 @@ if (navClose) {
 }
 
 /*=============== REMOVE MENU MOBILE ===============*/
-const navLink = document.querySelectorAll(".nav__link");
+const NAVIGATION_LINKS = document.querySelectorAll(".nav__link");
 
 const linkAction = () => {
   const navMenu = document.getElementById("nav-menu");
   // When we click on each nav__link, we remove the show-menu class
+  navToggle.style.opacity = 1;
   navMenu.classList.remove("show-menu");
 };
-navLink.forEach((n) => n.addEventListener("click", linkAction));
+NAVIGATION_LINKS.forEach((n) => n.addEventListener("click", linkAction));
 
 /*=============== SWIPER SLIDES ===============*/
 let swiperProjects = new Swiper(".home__container", {
@@ -58,6 +59,7 @@ var options_swiper = new Swiper("#options-slider", {
 const API_URL = "https://www.thecocktaildb.com/api/json/v1/1/filter.php?";
 const DRINKS_CONTAINER = document.getElementById("drinks");
 let lastSelected = "All";
+let searchInput;
 let DRINK_LIST = [];
 let drinks;
 let filteredList;
@@ -81,6 +83,7 @@ const DRINK_CATEGORIES = [
 function goToDetails(id) {
   localStorage.setItem("DRINK_LIST", JSON.stringify(DRINK_LIST));
   localStorage.setItem("id", id);
+  localStorage.setItem("filter", `${lastSelected},${searchInput.value}`);
   window.location.href = "details.html";
 }
 
@@ -120,7 +123,7 @@ function filterByName(name) {
 }
 
 function initSearchInput() {
-  const searchInput = document.getElementById("search");
+  searchInput = document.getElementById("search");
   searchInput.addEventListener("keyup", () => {
     filterByName(searchInput.value);
   });
@@ -132,7 +135,7 @@ function filterByCategory(category) {
   if (category !== "All") {
     filteredList = filteredList.filter((drink) => drink.category === category);
   }
-  filterByName(document.getElementById("search").value);
+  filterByName(searchInput.value);
 }
 
 function initFilters() {
@@ -143,10 +146,7 @@ function initFilters() {
     option.addEventListener("click", function () {
       if (this.id !== lastSelected) {
         const lastSelectedOption = document.getElementById(lastSelected);
-        if (
-          lastSelectedOption &&
-          lastSelectedOption.classList.contains("selected")
-        ) {
+        if (lastSelectedOption?.classList.contains("selected")) {
           lastSelectedOption.classList.remove("selected");
         }
         this.classList.add("selected");
@@ -157,55 +157,58 @@ function initFilters() {
   });
 }
 
-function getAllDrinks() {
-  const promises = [];
+async function getAllDrinks() {
   let drinks = [];
-
-  FETCH_CATEGORIES.forEach((category) => {
-    promises.push(
+  try {
+    const promises = FETCH_CATEGORIES.map((category) =>
       fetch(`${API_URL}c=${category}`).then((response) => response.json())
     );
-  });
-  Promise.all(promises)
-    .then(async (lists) => {
-      lists.forEach((list, index) => {
-        drinks = drinks.concat(
-          list.drinks.map((item) => ({
-            ...item,
-            category: DRINK_CATEGORIES[index],
-          }))
-        );
-      });
-
-      const response = await fetch(`${API_URL}a=Non_Alcoholic`);
-      return await response.json();
-    })
-    .then((list) => {
+    const lists = await Promise.all(promises);
+    lists.forEach((list, index) => {
       drinks = drinks.concat(
-        list.drinks.map((item) => ({ ...item, category: "Non-Alcoholic" }))
+        list.drinks.map((item) => ({
+          ...item,
+          category: DRINK_CATEGORIES[index],
+        }))
       );
-    })
-    .then(() => {
-      drinks.sort((a, b) => a.strDrink.localeCompare(b.strDrink));
-      DRINK_LIST = drinks;
-      drinks.forEach((drink) => {
-        createCard(drink);
-      });
-      initFilters();
-      initSearchInput();
-    })
-    .catch((error) => {
-      console.error(error);
     });
+
+    const response = await fetch(`${API_URL}a=Non_Alcoholic`);
+    const nonAlcoholic = await response.json();
+    drinks = drinks.concat(
+      nonAlcoholic.drinks.map((item) => ({
+        ...item,
+        category: "Non-Alcoholic",
+      }))
+    );
+
+    drinks.sort((a, b) => a.strDrink.localeCompare(b.strDrink));
+    DRINK_LIST = drinks;
+    drinks.forEach((drink) => {
+      DRINKS_CONTAINER.appendChild(createCard(drink));
+    });
+  } catch (error) {
+    console.error(error);
+  }
 }
+
+initSearchInput();
+initFilters();
 
 const LIST_ON_STORAGE = localStorage.getItem("DRINK_LIST");
 if (LIST_ON_STORAGE) {
   DRINK_LIST = JSON.parse(LIST_ON_STORAGE);
-  initFilters();
-  initSearchInput();
 } else {
   getAllDrinks();
 }
 
-// getAllDrinks();
+
+const FILTER_ON = localStorage.getItem("filter")?.split(",");
+if (FILTER_ON) {
+  lastSelected = FILTER_ON[0];
+  searchInput.value = FILTER_ON[1];
+  document.getElementById(lastSelected).classList.add("selected");
+  filterByCategory(lastSelected);
+} else {
+  document.getElementById("All").classList.add("selected");
+}
