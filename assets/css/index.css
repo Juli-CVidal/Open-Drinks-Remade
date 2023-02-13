@@ -260,13 +260,3 @@
     padding: 0.5rem 0.75rem;
   }
 }
-
-@media screen and (max-width: 500px){
-  .drinks{
-    grid-template-columns: repeat(2,1fr);
-  }
-
-  .card{
-    min-height: 150px;
-  }
-}
