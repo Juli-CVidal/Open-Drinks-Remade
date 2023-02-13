@@ -13,17 +13,20 @@ main {
   background-size: cover;
   margin: 0 auto;
 }
+.details__container {
+  position: absolute;
+  width: 100%;
+}
 
 .drink__details {
-  position: absolute;
+  position: relative;
   background-color: var(--body-color);
   box-shadow: rgba(0, 0, 0, 0.19) 0px 10px 20px, rgba(0, 0, 0, 0.23) 0px 6px 6px;
   width: 60%;
   min-height: 30rem;
   padding: 3rem;
   border-radius: 1.5rem;
-  margin-top: 10rem;
-  margin-left: 5rem;
+  margin: 10rem auto;
 }
 
 #drink__name {
@@ -53,4 +56,10 @@ blockquote {
   font-size: var(--h3-font-size);
   color: var(--text-color);
   margin: 1rem 0;
+}
+
+@media screen and (max-width: 1023px) {
+  .drink__details {
+    width: 90%;
+  }
 }
