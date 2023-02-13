@@ -86,22 +86,32 @@ function goToDetails(id) {
   window.location.href = "details.html";
 }
 
+
+
+{/* <div class="card">
+        <div class="card__image one"></div>
+        <div class="card__description">
+          <h1 class="drink__name">Title</h1>
+          <p class="drink__category">
+            Lorem Ipsum is simply dummy text of the printing and typesetting
+            industry.
+          </p>
+        </div>
+      </div> */}
 function createCard(drink) {
   const card = document.createElement("div");
   card.id = drink.idDrink;
   card.className = "card";
-  card.innerHTML = `
-    <div class="card__img" style="background-image: url(${drink.strDrinkThumb})"></div>
-    <a class="card__link" href="#">
-      <div class="card__img--hover" style="background-image: url(${drink.strDrinkThumb})"></div>
-      <div class="card__info">
-        <span class="card__category">${drink.category}</span>
-        <h3 class="card__title">${drink.strDrink}</h3>
-      </div>
-    </a>
-  `;
-  card.querySelector(".card__link").addEventListener("click", (e) => {
-    e.preventDefault();
+  card.innerHTML = `<div class="card__image"></div>
+        <div class="card__description">
+          <h1 class="drink__name">${drink.strDrink}</h1>
+          <p class="drink__category">
+            ${drink.category}
+          </p>
+        </div>;
+        `
+  card.querySelector(".card__image").style.backgroundImage = `url(${drink.strDrinkThumb})`
+  card.addEventListener("click", () => {
     goToDetails(drink.idDrink);
   });
   return card;

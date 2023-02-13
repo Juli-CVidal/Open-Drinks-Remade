@@ -176,91 +176,77 @@
 .drinks {
   display: grid;
   /* justify-items: center; */
-  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
   /* grid-gap: 1rem; */
   margin: 0 auto;
   max-width: 80%;
 }
 
 .card {
-  margin: 0 25px 16px 0;
-  transition: all 0.4s cubic-bezier(0.175, 0.885, 0, 1);
-  background-color: rgba(4, 4, 4, 0.6);
-  max-width: 300px;
-  min-height: 200px;
-  position: relative;
-  border-radius: 12px;
+  margin: 0.5rem 1rem 0;
+  min-width: 300px;
+  height: 200px;
+  background: #fff;
+  border-radius: 20px;
+  border: 3px solid #fff;
   overflow: hidden;
-  box-shadow: 0px 13px 10px -7px rgba(0, 0, 0, 0.1);
+  color: var(--text-color);
+  box-shadow: rgba(0, 0, 0, 0.19) 0px 10px 20px, rgba(0, 0, 0, 0.23) 0px 6px 6px;
+  cursor: pointer;
+  transition: all 0.3s ease-in-out;
 }
-
 .card:hover {
-  box-shadow: 0px 30px 18px -8px rgba(0, 0, 0, 0.1);
-  transform: scale(1.1, 1.1);
-}
-
-.card__img {
-  visibility: hidden;
-  background-size: cover;
-  background-position: center;
-  background-repeat: no-repeat;
-  width: 100px;
-  height: 20%;
-  border-top-left-radius: 12px;
-  border-top-right-radius: 12px;
-}
-
-.card__img--hover {
-  transition: 0.2s all ease-out;
-  background-size: cover;
-  background-position: center;
-  background-repeat: no-repeat;
-  width: 100%;
-  position: absolute;
-  height: 235px;
-  border-top-left-radius: 12px;
-  border-top-right-radius: 12px;
-  top: 0;
-}
-
-.card:hover .card__img--hover {
-  height: 100%;
-  opacity: 0.3;
-}
-
-.card__info {
-  font-weight: var(--font-semi-bold);
-  width: 100%;
-  z-index: 2;
-  border-bottom-left-radius: 12px;
-  border-bottom-right-radius: 12px;
-  padding: 16px;
-}
-
-.card:hover .card__info {
-  background-color: transparent;
-  position: relative;
-}
-
-.card__category {
-  font-family: "Raleway", sans-serif;
-  text-transform: uppercase;
-  font-size: var(--small-font-size);
-  letter-spacing: 2px;
-  font-weight: (--font-semi-bold);
+  transform: scale(1.1);
   color: var(--gold-color);
+  box-shadow: var(--darker-gold-color) 0px 10px 20px, var(--darker-gold-color) 0px 6px 6px;
+}
+.card__image {
+  height: 70%;
+  width: 100%;
+  background-size: cover;
+  border-radius: 100% 0% 100% 0% / 0% 50% 50% 100%;
+  box-shadow: -8px -6px 22px 0px rgba(0,0,0,0.75) inset;
+  display: grid;
+  place-items: center;
+  transition: height 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
 }
 
-.card__title {
-  color: var(--title-color);
-  width: 100%;
-  font-size: 1rem;
+.card:hover .card__image{
+  height: 55%;
+  box-shadow: -8px -6px 22px 0px hsla(var(--darker-gold-color),0.75) inset;
+}
+
+.card__image i {
+  color: #fff;
+  font-size: 72px;
+}
+.card__description {
   font-weight: var(--font-semi-bold);
-  margin-top: 5px;
   display: flex;
   flex-direction: column;
-  justify-content: center;
-  font-family: "Roboto Slab", serif;
+  align-items: center;
+  width: 100%;
+  margin: 0 auto;
+}
+.drink__name {
+  text-align: center;
+  text-transform: uppercase;
+  font-size: var(--h3-font-size);
+  margin-top: 5px;
+  margin-bottom: 10px;
+}
+.drink__category {
+  opacity: 0;
+  font-family: "Raleway", sans-serif;
+  text-align: center;
+  text-transform: uppercase;
+  font-size: var(--small-font-size);
+  margin-bottom: 20px;
+  transition: opacity 0.3s ease-in-out;
+}
+
+.card:hover .drink__category{
+  opacity: 1;
 }
 
 

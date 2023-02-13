@@ -54,7 +54,7 @@ function getIngredients(drinkResponse) {
       break;
     }
     INGREDIENT_MEASURES[drinkResponse[`strIngredient${index}`]] =
-      drinkResponse[`strMeasure${index}`];
+      (drinkResponse[`strMeasure${index}` ] || "");
   }
 
   const ingredient_container = document.getElementById("ingredients");
