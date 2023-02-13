@@ -1,10 +1,11 @@
 /* ========== HOME ========== */
 .home__content {
+
   display: flex;
   align-items: center;
   justify-content: center;
   width: 100%;
-  height: 500px;
+  height: 350px;
   overflow: hidden;
   position: relative;
 }
@@ -16,11 +17,9 @@
 }
 
 .home__content div {
-  position: absolute;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  top: 0;
+  position: fixed;
+  width: 100%;
+  height: 100%;
   background-color: rgba(0, 0, 0, 0.6);
   display: flex;
   flex-direction: column;
@@ -29,6 +28,7 @@
 }
 
 .home__title {
+  margin-top: 4rem;
   font-size: 2rem;
   color: hsl(205, 87%, 94%);
 }
@@ -40,43 +40,10 @@
 }
 
 .home__content img {
-  width: 100%;
-  height: 500px;
-  object-fit: cover;
-}
-
-.home__button {
-  color: var(--darker-gold-color);
   position: fixed;
-  z-index: 1;
-  top: 70%;
-  left: 50%;
-  margin-left: -100px;
-  width: 200px;
-  border-radius: 8px;
-  font-size: 1.5rem;
-  cursor: pointer;
-  line-height: 3rem;
-  transition: 0.6s;
-  box-shadow: inset 0px 3px 5px rgba(255, 255, 255, 0.5),
-    0px 0px 10px rgba(0, 0, 0, 0.15);
-  background: linear-gradient(
-    45deg,
-    rgba(2, 0, 36, 0) 5%,
-    rgba(255, 255, 255, 0.5) 6%,
-    rgba(255, 255, 255, 0) 9%,
-    rgba(255, 255, 255, 0.5) 10%,
-    rgba(255, 255, 255, 0) 17%
-  );
-  background-size: 150%;
-  background-position: right;
-}
-
-.home__button:hover {
-  background-position: left;
-  color: var(--gold-color);
-  box-shadow: inset 0px 3px 5px var(--gold-color),
-    0px 0px 10px rgba(0, 0, 0, 0.25);
+  width: 100%;
+  height: 350px;
+  object-fit: cover;
 }
 
 /* ========== CATALOGUE ========== */
