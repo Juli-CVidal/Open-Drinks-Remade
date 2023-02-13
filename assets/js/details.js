@@ -20,10 +20,6 @@ if (navClose) {
 }
 
 /*=============== REMOVE MENU MOBILE ===============*/
-const FORMAT_CATEGORIES = {
-  "Coffee / Tea": "Cofee-Tea",
-  "Homemade Liqueur": "Homemade-Liqueur",
-};
 
 const NAVIGATION_LINKS = document.querySelectorAll(".nav__link");
 
@@ -37,13 +33,40 @@ NAVIGATION_LINKS.forEach((n) => n.addEventListener("click", linkAction));
 
 const API_URL = "https://www.thecocktaildb.com/api/json/v1/1/lookup.php?i=";
 
-function getCategories(drinkResponse) {
-  let categories =
-    FORMAT_CATEGORIES[drinkResponse.strCategory] || drinkResponse.strCategory;
-  if (drinkResponse.strAlcoholic == "Non alcoholic") {
-    categories += ", Non-Alcoholic";
+function goToCategory(category) {
+  localStorage.setItem("category", category);
+  localStorage.removeItem("lastSearch");
+  window.location.href = "index.html";
+}
+
+function formatCategory(category, alcoholic) {
+  let formattedCategory = category.split(" / ").slice(0, 2).join("-");
+  if (alcoholic == "Non alcoholic") {
+    formattedCategory += ",Non-Alcoholic";
   }
-  return categories;
+
+  return formattedCategory;
+}
+
+function getCategories(drinkResponse) {
+  const CATEGORIES_CONTAINER = document.getElementById("drink__categories");
+  let categories = formatCategory(
+    drinkResponse.strCategory,
+    drinkResponse.strAlcoholic
+  );
+
+  categories.split(",").forEach((category) => {
+    const spam = document.createElement("spam");
+    spam.href = "#";
+    spam.innerText = category;
+    spam.addEventListener("click", () => goToCategory(category));
+    CATEGORIES_CONTAINER.appendChild(spam);
+    const comma = document.createTextNode(", ");
+    CATEGORIES_CONTAINER.appendChild(comma);
+  });
+
+  // Delete the last comma
+  CATEGORIES_CONTAINER.removeChild(CATEGORIES_CONTAINER.lastChild);
 }
 
 function getIngredients(drinkResponse) {
@@ -54,7 +77,7 @@ function getIngredients(drinkResponse) {
       break;
     }
     INGREDIENT_MEASURES[drinkResponse[`strIngredient${index}`]] =
-      (drinkResponse[`strMeasure${index}` ] || "");
+      drinkResponse[`strMeasure${index}`] || "";
   }
 
   const ingredient_container = document.getElementById("ingredients");
@@ -84,7 +107,7 @@ function createPage(data) {
     "drink__image"
   ).style.backgroundImage = `url(${data.strDrinkThumb})`;
   document.getElementById("drink__name").innerText = data.strDrink;
-  document.getElementById("drink__categories").innerText = getCategories(data);
+  getCategories(data);
 
   getIngredients(data);
   getSteps(data.strInstructions);

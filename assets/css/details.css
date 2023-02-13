@@ -36,6 +36,17 @@ main {
   letter-spacing: 5px;
 }
 
+#drink__categories {
+  color: var(--gold-color);
+  font-family: "Raleway", sans-serif;
+  text-transform: uppercase;
+  font-size: var(--small-font-size);
+}
+
+#drink__categories spam {
+  cursor: pointer;
+}
+
 .content h2 {
   font-size: var(--h2-font-size);
   font-weight: 600;

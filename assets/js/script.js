@@ -52,11 +52,13 @@ let swiperProjects = new Swiper(".home__container", {
 /*===============  CATALOGUE ===============*/
 const API_URL = "https://www.thecocktaildb.com/api/json/v1/1/filter.php?";
 const DRINKS_CONTAINER = document.getElementById("drinks");
+let options_swiper;
 let lastSelected = "All";
 let searchInput;
 let DRINK_LIST = [];
 let filteredList = [];
 
+// RELATED TO OPTIONS
 const FETCH_CATEGORIES = [
   "Beer",
   "Cocktail",
@@ -70,51 +72,47 @@ const FETCH_CATEGORIES = [
   "Shot",
   "Soft Drink",
 ];
-const DRINK_CATEGORIES = FETCH_CATEGORIES.map(category => {
-  if (category.length == 1){
+const DRINK_CATEGORIES = FETCH_CATEGORIES.map((category) => {
+  if (category.length == 1) {
     return category;
   }
   let formattedCategory = category.split(" / ");
-  return formattedCategory.slice(0,2).join("-");
-})
-DRINK_CATEGORIES.push("Non-Alcoholic")
+  return formattedCategory.slice(0, 2).join("-");
+});
+DRINK_CATEGORIES.push("Non-Alcoholic");
 
-function goToDetails(id) {
-  localStorage.setItem("DRINK_LIST", JSON.stringify(DRINK_LIST));
-  localStorage.setItem("id", id);
-  localStorage.setItem("filter", `${lastSelected},${searchInput.value}`);
-  window.location.href = "details.html";
+function createOptions() {
+  const OPTION_CONTAINER = document.getElementById("options-slider");
+  const container = document.createElement("div");
+  container.classList.add("swiper-wrapper");
+
+  DRINK_CATEGORIES.forEach((category) => {
+    const slide = document.createElement("div");
+    slide.classList.add("swiper-slide");
+
+    const option = document.createElement("li");
+    option.classList.add("option");
+    option.id = category;
+    option.textContent = category.split("-").join(" ");
+
+    slide.appendChild(option);
+    container.appendChild(slide);
+  });
+  OPTION_CONTAINER.appendChild(container);
+
+  /*SWIPER FOR OPTIONS*/
+  options_swiper = new Swiper("#options-slider", {
+    slidesPerView: "auto",
+    spaceBetween: 10,
+    freeMode: true,
+  });
 }
 
+//RELATED TO FILTER
+function getPreviousFilter() {
+  searchInput.value = localStorage.getItem("lastSearch") || "";
 
-
-{/* <div class="card">
-        <div class="card__image one"></div>
-        <div class="card__description">
-          <h1 class="drink__name">Title</h1>
-          <p class="drink__category">
-            Lorem Ipsum is simply dummy text of the printing and typesetting
-            industry.
-          </p>
-        </div>
-      </div> */}
-function createCard(drink) {
-  const card = document.createElement("div");
-  card.id = drink.idDrink;
-  card.className = "card";
-  card.innerHTML = `<div class="card__image"></div>
-        <div class="card__description">
-          <h1 class="drink__name">${drink.strDrink}</h1>
-          <p class="drink__category">
-            ${drink.category}
-          </p>
-        </div>;
-        `
-  card.querySelector(".card__image").style.backgroundImage = `url(${drink.strDrinkThumb})`
-  card.addEventListener("click", () => {
-    goToDetails(drink.idDrink);
-  });
-  return card;
+  return localStorage.getItem("category") || "All";
 }
 
 function filterByName(name) {
@@ -165,6 +163,49 @@ function initFilters() {
   });
 }
 
+//RELATED TO CATALOGUE
+
+function goToDetails(id) {
+  localStorage.setItem("DRINK_LIST", JSON.stringify(DRINK_LIST));
+  localStorage.setItem("id", id);
+  localStorage.setItem("category", lastSelected);
+  localStorage.setItem("lastSearch", searchInput.value);
+  window.location.href = "details.html";
+}
+
+{
+  /* <div class="card">
+        <div class="card__image one"></div>
+        <div class="card__description">
+          <h1 class="drink__name">Title</h1>
+          <p class="drink__category">
+            Lorem Ipsum is simply dummy text of the printing and typesetting
+            industry.
+          </p>
+        </div>
+      </div> */
+}
+function createCard(drink) {
+  const card = document.createElement("div");
+  card.id = drink.idDrink;
+  card.className = "card";
+  card.innerHTML = `<div class="card__image"></div>
+        <div class="card__description">
+          <h1 class="drink__name">${drink.strDrink}</h1>
+          <p class="drink__category">
+            ${drink.category}
+          </p>
+        </div>;
+        `;
+  card.querySelector(
+    ".card__image"
+  ).style.backgroundImage = `url(${drink.strDrinkThumb})`;
+  card.addEventListener("click", () => {
+    goToDetails(drink.idDrink);
+  });
+  return card;
+}
+
 async function getDrinksFromAPI() {
   let drinks = [];
   try {
@@ -197,48 +238,12 @@ async function getDrinksFromAPI() {
   }
 }
 
-function getPreviousFilter() {
-  const FILTER_ON = localStorage.getItem("filter")?.split(",");
-  if (FILTER_ON) {
-    searchInput.value = FILTER_ON[1];
-    return FILTER_ON[0];
-  }
-  return "All";
-}
-
 function getDrinkList() {
   const LIST_ON_STORAGE = localStorage.getItem("DRINK_LIST");
   if (LIST_ON_STORAGE) {
     return JSON.parse(LIST_ON_STORAGE);
   }
   return getDrinksFromAPI();
-}
-
-function createOptions() {
-  const OPTION_CONTAINER = document.getElementById("options-slider");
-  const container = document.createElement("div");
-  container.classList.add("swiper-wrapper");
-
-  DRINK_CATEGORIES.forEach((category) => {
-    const slide = document.createElement("div");
-    slide.classList.add("swiper-slide");
-
-    const option = document.createElement("li");
-    option.classList.add("option");
-    option.id = category;
-    option.textContent = category.split("-").join(" ");
-
-    slide.appendChild(option);
-    container.appendChild(slide);
-  });
-  OPTION_CONTAINER.appendChild(container);
-
-  /*SWIPER FOR OPTIONS*/
-  var options_swiper = new Swiper("#options-slider", {
-    slidesPerView: "auto",
-    spaceBetween: 10,
-    freeMode: true,
-  });
 }
 
 async function init() {
@@ -248,8 +253,8 @@ async function init() {
 
   DRINK_LIST = await getDrinkList();
   lastSelected = getPreviousFilter();
-  console.log(lastSelected);
-  document.getElementById(lastSelected).classList.add("selected");
+  const SELECTED_OPTION = document.getElementById(lastSelected);
+  SELECTED_OPTION.classList.add("selected");
   filterByCategory(lastSelected);
 }
 
