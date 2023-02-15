@@ -56,11 +56,11 @@ function getCategories(drinkResponse) {
   );
 
   categories.split(",").forEach((category) => {
-    const spam = document.createElement("spam");
-    spam.href = "#";
-    spam.innerText = category;
-    spam.addEventListener("click", () => goToCategory(category));
-    CATEGORIES_CONTAINER.appendChild(spam);
+    const span = document.createElement("span");
+    span.href = "#";
+    span.innerText = category;
+    span.addEventListener("click", () => goToCategory(category));
+    CATEGORIES_CONTAINER.appendChild(span);
     const comma = document.createTextNode(", ");
     CATEGORIES_CONTAINER.appendChild(comma);
   });
@@ -125,3 +125,13 @@ function getDrink() {
 }
 
 getDrink();
+
+/*=============== LOADER ===============*/
+
+window.addEventListener("load", () => {
+  const preloader = document.getElementById("preloader__area");
+  setTimeout(() => {
+    preloader.style.opacity = 0;
+    setTimeout(() => (preloader.style.display = "none"), 1);
+  }, 500);
+});

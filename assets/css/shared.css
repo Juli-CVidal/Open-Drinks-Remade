@@ -230,6 +230,93 @@ img {
   color: var(--title-color);
 }
 
+/*=============== LOADER ===============*/
+#preloader__area {
+  position: fixed;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: var(--container-color);
+  width: 100%;
+  height: 100%;
+  z-index: 9999;
+  transition: opacity 0.4s;
+}
+
+.wineglass {
+  height: 36px;
+  position: relative;
+}
+.wineglass:after {
+  content: "";
+  position: absolute;
+  top: 47px;
+  left: 5px;
+  width: 20px;
+  height: 5px;
+  background: white;
+  box-shadow: 0 0 1px white;
+}
+.top {
+  background: white;
+  width: 30px;
+  height: 36px;
+  border-radius: 0 0 36px 36px;
+  box-shadow: 0 0 1px white;
+}
+.top:before {
+  content: "";
+  position: absolute;
+  left: 4px;
+  bottom: 4px;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: linear-gradient(transparent 50%, #b11226 50%);
+}
+.left .top:before {
+  animation: rotate2 2s linear infinite;
+}
+.right .top:before {
+  animation: rotate1 2s linear infinite;
+}
+.top:after {
+  content: "";
+  position: absolute;
+  top: 35px;
+  left: 12px;
+  width: 6px;
+  height: 13px;
+  background: white;
+  box-shadow: 0 0 1px white;
+}
+.left {
+  display: inline-block;
+  margin-right: 10px;
+  animation: rotate1 2s cubic-bezier(0.39, 1.52, 0.46, 0.92) infinite;
+}
+.right {
+  display: inline-block;
+  animation: rotate2 2s cubic-bezier(0.39, 1.52, 0.46, 0.92) infinite;
+}
+@keyframes rotate1 {
+  0% {
+    transform: rotate(0deg);
+  }
+  50% {
+    transform: rotate(22deg);
+  }
+}
+@keyframes rotate2 {
+  0% {
+    transform: rotate(0deg);
+  }
+  50% {
+    transform: rotate(-22deg);
+  }
+}
+
+
 /* ========== RESPONSIVE ========== */
 @media screen and (max-width: 340px) {
   .container {
@@ -239,7 +326,7 @@ img {
   .nav__menu {
     padding-bottom: 4rem;
   }
-  
+
   .nav__list {
     gap: 1rem 1.25rem;
   }
@@ -251,7 +338,7 @@ img {
   .nav__menu {
     width: 380px;
   }
-  
+
   .nav {
     margin: 0 auto;
   }
@@ -311,5 +398,4 @@ img {
     transform: scaleX(1);
     transform-origin: bottom left;
   }
-
 }

@@ -259,3 +259,13 @@ async function init() {
 }
 
 init();
+
+
+/*=============== LOADER ===============*/
+window.addEventListener("load", () => {
+  const preloader = document.getElementById("preloader__area");
+  setTimeout(() => {
+    preloader.style.opacity = 0;
+    setTimeout(() => (preloader.style.display = "none"), 1);
+  }, 500);
+});

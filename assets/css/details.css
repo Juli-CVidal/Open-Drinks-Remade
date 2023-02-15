@@ -43,7 +43,7 @@ main {
   font-size: var(--small-font-size);
 }
 
-#drink__categories spam {
+#drink__categories span {
   cursor: pointer;
 }
 
