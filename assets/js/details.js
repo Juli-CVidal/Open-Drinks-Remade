@@ -107,6 +107,7 @@ function createPage(data) {
     "drink__image"
   ).style.backgroundImage = `url(${data.strDrinkThumb})`;
   document.getElementById("drink__name").innerText = data.strDrink;
+  document.title = data.strDrink;
   getCategories(data);
 
   getIngredients(data);
